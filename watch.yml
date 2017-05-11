@@ -1,0 +1,12 @@
+repos:
+  dockercraft:
+    url: https://github.com/docker/dockercraft
+    branches:
+      master:
+        paths:
+          - /config
+
+  docker-tunnel:
+    url: https://github.com/aduermael/docker-tunnel
+    branches:
+      master:

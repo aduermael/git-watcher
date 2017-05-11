@@ -1,0 +1,3 @@
+package: github.com/aduermael/github-repo-watcher
+import:
+- package: github.com/go-yaml/yaml.git
