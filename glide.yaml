@@ -1,3 +1,4 @@
 package: github.com/aduermael/github-repo-watcher
 import:
 - package: github.com/go-yaml/yaml.git
+- package: gopkg.in/src-d/go-git.v4
