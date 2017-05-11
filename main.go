@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"time"
 
 	git "gopkg.in/src-d/go-git.v4"
 	yaml "gopkg.in/yaml.v2"
@@ -29,13 +30,17 @@ type Branch struct {
 	Paths []string
 }
 
+var (
+	config *WatchConfig
+)
+
 func main() {
 	ymlBytes, err := ioutil.ReadFile("watch.yml")
 	if err != nil {
 		fail(err)
 	}
 
-	config := &WatchConfig{}
+	config = &WatchConfig{}
 
 	err = yaml.Unmarshal([]byte(ymlBytes), config)
 	if err != nil {
@@ -92,6 +97,29 @@ func main() {
 		}
 
 		debug("-", remotes[0].Config().URL)
+	}
+
+	// loop forever, looking for changes
+	loop()
+}
+
+func loop() {
+	for {
+		for name, repoInfo := range config.Repos {
+			repoDir := "./repos/" + name
+			repo, err := git.PlainOpen(repoDir)
+			if err != nil {
+				fail(err)
+			}
+			// fetch
+			err = repo.Fetch(&git.FetchOptions{})
+			if err != nil && err != git.NoErrAlreadyUpToDate {
+				fail(err)
+			}
+			debug("fetched", repoInfo.URL)
+		}
+
+		time.Sleep(10 * time.Second)
 	}
 }
 
