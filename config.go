@@ -34,6 +34,5 @@ func saveYML(ymlPath string, conf *WatchConfig) {
 	if err != nil {
 		fail(err)
 	}
-
 	ioutil.WriteFile(ymlPath, ymlBytes, 0644)
 }

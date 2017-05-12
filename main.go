@@ -11,14 +11,15 @@ var (
 )
 
 func main() {
-
 	parseYML(configFile, config)
 
 	for _, repo := range config.Repos {
 		repo.openOrInitGitRepo()
 	}
 
-	// saveYML(configFile, config)
+	// if new repositories have been initiated, it's a good time to save
+	// commits in the configuration file.
+	saveYML(configFile, config)
 
 	// loop forever, looking for changes
 	loop()
@@ -30,6 +31,8 @@ func loop() {
 			// compare commits, looking for changes
 			_ = repo.fetchAndLookForChanges()
 		}
+
+		saveYML(configFile, config)
 
 		time.Sleep(10 * time.Second)
 	}

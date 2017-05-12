@@ -131,11 +131,11 @@ func (r *Repo) fetchAndLookForChanges() error {
 		return errors.New("git repo not opened")
 	}
 
-	debug("fetching", r.URL)
-
 	err := r.gitRepo.Fetch(&git.FetchOptions{})
 	if err != nil && err != git.NoErrAlreadyUpToDate {
 		debug(err)
+		// TODO: an error here may be due to a force push
+		// we can just reset head and generate a message
 		return err
 	}
 
@@ -155,6 +155,10 @@ func (r *Repo) fetchAndLookForChanges() error {
 				// look for changes...
 				if branch.Commit != ref.Hash().String() {
 					debug(branch.Commit, "!=", ref.Hash().String())
+
+					// TODO: DIFF + report changes
+
+					branch.Commit = ref.Hash().String()
 				}
 			}
 		}
