@@ -171,7 +171,9 @@ func (r *Repo) fetchAndLookForChanges() error {
 					}
 
 					diffs := parseDiffOutput(output)
-					debug(diffs)
+					for _, diff := range diffs {
+						debug(diff.Type, "-", diff.File)
+					}
 
 					os.Chdir(wd)
 
