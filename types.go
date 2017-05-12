@@ -169,8 +169,9 @@ func (r *Repo) fetchAndLookForChanges() error {
 					if err != nil {
 						return err
 					}
-					outputStr := strings.TrimSpace(string(output))
-					debug("OUTPUT:\n", outputStr)
+
+					diffs := parseDiffOutput(output)
+					debug(diffs)
 
 					os.Chdir(wd)
 
