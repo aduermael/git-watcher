@@ -124,3 +124,39 @@ func (r *Repo) openOrInitGitRepo() error {
 
 	return nil
 }
+
+func (r *Repo) fetchAndLookForChanges() error {
+
+	if r.gitRepo == nil {
+		return errors.New("git repo not opened")
+	}
+
+	err := r.gitRepo.Fetch(&git.FetchOptions{})
+	if err != nil && err != git.NoErrAlreadyUpToDate {
+		return err
+	}
+
+	debug("fetched", r.URL)
+
+	// check references
+	referencesIter, err := r.gitRepo.References()
+	if err != nil {
+		return err
+	}
+	referencesIter.ForEach(func(ref *gitPlumbing.Reference) error {
+		// only consider remotes
+		if ref.IsRemote() {
+			branch := r.GetBranchIfTracked(ref.Name().Short())
+			if branch != nil {
+				// commit has changed!
+				// look for changes...
+				if branch.Commit != ref.Hash().String() {
+					debug(branch.Commit, "!=", ref.Hash().String())
+				}
+			}
+		}
+		return nil
+	})
+
+	return nil
+}
