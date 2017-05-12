@@ -158,7 +158,6 @@ func (r *Repo) fetchAndLookForChanges() error {
 				if branch.Commit != ref.Hash().String() {
 					debug(branch.Commit, "!=", ref.Hash().String())
 
-					// TODO: DIFF + report changes
 					wd, err := os.Getwd()
 					if err != nil {
 						return err
@@ -174,6 +173,20 @@ func (r *Repo) fetchAndLookForChanges() error {
 					for _, diff := range diffs {
 						debug(diff.Type, "-", diff.File)
 					}
+
+					report := true
+
+					// see if we actually need to report, we may not be
+					// interested in changes depending on the files affected
+					if len(branch.Paths) > 0 {
+						// TODO: check and set report = false if needed
+					}
+
+					if report {
+						diffToRSSFeed("TITLE", "DESCRIPTION", diffs)
+					}
+
+					// TODO: analyze diff and report if interested in changes
 
 					os.Chdir(wd)
 
