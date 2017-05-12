@@ -1,13 +1,8 @@
 repos:
-  dockercraft:
-    url: https://github.com/docker/dockercraft
-    branches:
-      master:
-        paths:
-          - /config
-
   git-repo-watcher:
     url: https://github.com/aduermael/git-repo-watcher
     branches:
       master:
+        paths:
+        - /test
       test:
