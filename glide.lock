@@ -1,10 +1,72 @@
-hash: 7e8e1debdd76b2ea0ee854827d205b365d9bba6348700abcada5884bd82f9677
-updated: 2017-05-11T18:30:36.938737855Z
+hash: c0e4365712cc04fd371a16c2fc542ead2d2d603b92fcc17b8466dbd1b413eb35
+updated: 2017-05-12T22:52:00.851998148Z
 imports:
 - name: github.com/go-yaml/yaml.git
   version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
+- name: github.com/gorilla/feeds
+  version: 441264de03a8117ed530ae8e049d8f601a33a099
+- name: github.com/sergi/go-diff
+  version: feef008d51ad2b3778f85d387ccf91735543008d
+  subpackages:
+  - diffmatchpatch
+- name: github.com/src-d/gcfg
+  version: f187355171c936ac84a82793659ebb4936bc1c23
+  subpackages:
+  - scanner
+  - token
+  - types
+- name: golang.org/x/crypto
+  version: ab89591268e0c8b748cbe4047b00197516011af5
+  subpackages:
+  - curve25519
+  - ed25519
+  - ed25519/internal/edwards25519
+  - ssh
+  - ssh/agent
+- name: gopkg.in/src-d/go-billy.v2
+  version: 99d839800b93542496ec19319f37abacf17f589f
+  subpackages:
+  - osfs
 - name: gopkg.in/src-d/go-git.v4
   version: 36c78b9d1b1eea682703fb1cbb0f4f3144354389
+  subpackages:
+  - config
+  - internal/revision
+  - plumbing
+  - plumbing/cache
+  - plumbing/filemode
+  - plumbing/format/config
+  - plumbing/format/idxfile
+  - plumbing/format/index
+  - plumbing/format/objfile
+  - plumbing/format/packfile
+  - plumbing/format/pktline
+  - plumbing/object
+  - plumbing/protocol/packp
+  - plumbing/protocol/packp/capability
+  - plumbing/protocol/packp/sideband
+  - plumbing/revlist
+  - plumbing/storer
+  - plumbing/transport
+  - plumbing/transport/client
+  - plumbing/transport/file
+  - plumbing/transport/git
+  - plumbing/transport/http
+  - plumbing/transport/internal/common
+  - plumbing/transport/server
+  - plumbing/transport/ssh
+  - storage
+  - storage/filesystem
+  - storage/filesystem/internal/dotgit
+  - storage/memory
+  - utils/binary
+  - utils/diff
+  - utils/ioutil
+  - utils/merkletrie
+  - utils/merkletrie/internal/frame
+  - utils/merkletrie/noder
+- name: gopkg.in/warnings.v0
+  version: 8a331561fe74dadba6edfc59f3be66c22c3b065d
 - name: gopkg.in/yaml.v2
   version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
 testImports: []

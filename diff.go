@@ -1,10 +1,6 @@
 package main
 
-import (
-	"encoding/xml"
-
-	"strings"
-)
+import "strings"
 
 // WatchConfig is the configuration used to watch Github repositories
 type Diff struct {
@@ -48,20 +44,4 @@ func parseDiffOutput(output []byte) []*Diff {
 	}
 
 	return diffs
-}
-
-func diffToRSSFeed(title, desc string, diffs []*Diff) {
-	channel := &Channel{Title: "git repo watcher"}
-	channel.Items = make([]*Item, 0)
-
-	item := &Item{Title: title, Description: desc + "\n"}
-
-	for _, diff := range diffs {
-		item.Description += string(diff.Type) + " - " + diff.File + "\n"
-	}
-
-	channel.Items = append(channel.Items, item)
-
-	xmlBytes, _ := xml.Marshal(channel)
-	debug(string(xmlBytes))
 }
