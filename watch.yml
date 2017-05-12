@@ -6,7 +6,8 @@ repos:
         paths:
           - /config
 
-  docker-tunnel:
-    url: https://github.com/aduermael/docker-tunnel
+  git-repo-watcher:
+    url: https://github.com/aduermael/git-repo-watcher
     branches:
       master:
+      test:
