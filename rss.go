@@ -20,15 +20,17 @@ func diffToRSSFeed(title, desc string, diffs []*Diff) {
 	}
 
 	item := &feeds.Item{
-		Title:       "changes",
-		Link:        &feeds.Link{Href: "https://github.com"},
-		Description: "Changes:<br />",
-		Author:      &feeds.Author{Name: "Jason Moiron", Email: "jmoiron@jmoiron.net"},
-		Created:     now,
+		Title: "changes",
+		Link:  &feeds.Link{Href: "https://github.com"},
+		Description: `Changes:
+`,
+		Author:  &feeds.Author{Name: "Jason Moiron", Email: "jmoiron@jmoiron.net"},
+		Created: now,
 	}
 
 	for _, diff := range diffs {
-		item.Description += string(diff.Type) + " - " + diff.File + "<br />"
+		item.Description += string(diff.Type) + " - " + diff.File + `
+`
 	}
 
 	feed.Items = append(feed.Items, item)
