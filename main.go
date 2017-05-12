@@ -18,7 +18,7 @@ func main() {
 		repo.openOrInitGitRepo()
 	}
 
-	saveYML(configFile, config)
+	// saveYML(configFile, config)
 
 	// loop forever, looking for changes
 	loop()

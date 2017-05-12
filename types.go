@@ -103,24 +103,24 @@ func (r *Repo) openOrInitGitRepo() error {
 		if err != nil {
 			return err
 		}
-	}
 
-	// save current ref hash from each branch we're watching
-	// (the configuration file will be updated with these commits)
-	referencesIter, err := r.gitRepo.References()
-	if err != nil {
-		return err
-	}
-	referencesIter.ForEach(func(ref *gitPlumbing.Reference) error {
-		// only consider remotes
-		if ref.IsRemote() {
-			branch := r.GetBranchIfTracked(ref.Name().Short())
-			if branch != nil {
-				branch.Commit = ref.Hash().String()
-			}
+		// save current ref hash from each branch we're watching
+		// (the configuration file will be updated with these commits)
+		referencesIter, err := r.gitRepo.References()
+		if err != nil {
+			return err
 		}
-		return nil
-	})
+		referencesIter.ForEach(func(ref *gitPlumbing.Reference) error {
+			// only consider remotes
+			if ref.IsRemote() {
+				branch := r.GetBranchIfTracked(ref.Name().Short())
+				if branch != nil {
+					branch.Commit = ref.Hash().String()
+				}
+			}
+			return nil
+		})
+	}
 
 	return nil
 }
@@ -131,8 +131,11 @@ func (r *Repo) fetchAndLookForChanges() error {
 		return errors.New("git repo not opened")
 	}
 
+	debug("fetching", r.URL)
+
 	err := r.gitRepo.Fetch(&git.FetchOptions{})
 	if err != nil && err != git.NoErrAlreadyUpToDate {
+		debug(err)
 		return err
 	}
 
