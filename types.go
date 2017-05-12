@@ -173,6 +173,7 @@ func (r *Repo) fetchAndLookForChanges() error {
 					for _, diff := range diffs {
 						debug(diff.Type, "-", diff.File)
 					}
+					os.Chdir(wd)
 
 					report := true
 
@@ -187,8 +188,6 @@ func (r *Repo) fetchAndLookForChanges() error {
 					}
 
 					// TODO: analyze diff and report if interested in changes
-
-					os.Chdir(wd)
 
 					branch.Commit = ref.Hash().String()
 				}

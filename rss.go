@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"time"
 
 	"github.com/gorilla/feeds"
@@ -10,13 +12,25 @@ func diffToRSSFeed(title, desc string, diffs []*Diff) {
 
 	now := time.Now()
 
-	feed := &feeds.Feed{
-		Title:       "Git repo watcher",
-		Link:        &feeds.Link{Href: ""},
-		Description: "Changes from watched Git repositories.",
-		Author:      &feeds.Author{Name: "Jason Moiron", Email: "jmoiron@jmoiron.net"},
-		Created:     now,
-		Items:       make([]*feeds.Item, 0),
+	jsonBytes, err := ioutil.ReadFile("./history.json")
+
+	var feed *feeds.Feed
+	err = json.Unmarshal(jsonBytes, &feed)
+	if err != nil {
+		debug("error:", err)
+		return
+	}
+
+	// build feed from scratch
+	if err != nil {
+		feed = &feeds.Feed{
+			Title:       "Git repo watcher",
+			Link:        &feeds.Link{Href: ""},
+			Description: "Changes from watched Git repositories.",
+			Author:      &feeds.Author{Name: "Jason Moiron", Email: "jmoiron@jmoiron.net"},
+			Created:     now,
+			Items:       make([]*feeds.Item, 0),
+		}
 	}
 
 	item := &feeds.Item{
@@ -33,7 +47,29 @@ func diffToRSSFeed(title, desc string, diffs []*Diff) {
 
 	feed.Items = append(feed.Items, item)
 
-	rss, _ := feed.ToRss()
+	jsonBytes, err = json.Marshal(feed)
+	if err != nil {
+		debug("error:", err)
+		return
+	}
 
-	debug(rss)
+	err = ioutil.WriteFile("./history.json", jsonBytes, 0644)
+	if err != nil {
+		debug("error:", err)
+		return
+	}
+
+	rss, _ := feed.ToRss()
+	err = ioutil.WriteFile("./rss.xml", []byte(rss), 0644)
+	if err != nil {
+		debug("error:", err)
+		return
+	}
+
+	atom, _ := feed.ToAtom()
+	err = ioutil.WriteFile("./atom.xml", []byte(atom), 0644)
+	if err != nil {
+		debug("error:", err)
+		return
+	}
 }
