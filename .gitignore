@@ -1,2 +1,5 @@
 .glide
 .DS_Store
+/rss.xml
+/history.json
+/atom.xml
