@@ -2,6 +2,8 @@ package main
 
 import (
 	"errors"
+	"os"
+	"os/exec"
 	"strings"
 
 	git "gopkg.in/src-d/go-git.v4"
@@ -157,6 +159,20 @@ func (r *Repo) fetchAndLookForChanges() error {
 					debug(branch.Commit, "!=", ref.Hash().String())
 
 					// TODO: DIFF + report changes
+					wd, err := os.Getwd()
+					if err != nil {
+						return err
+					}
+					os.Chdir(r.storageDir())
+					cmd := exec.Command("git", "diff", branch.Commit, ref.Hash().String(), "--name-status")
+					output, err := cmd.Output()
+					if err != nil {
+						return err
+					}
+					outputStr := strings.TrimSpace(string(output))
+					debug("OUTPUT:\n", outputStr)
+
+					os.Chdir(wd)
 
 					branch.Commit = ref.Hash().String()
 				}
