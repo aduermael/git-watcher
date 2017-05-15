@@ -188,14 +188,13 @@ func (r *Repo) fetchAndLookForChanges() error {
 						title := r.Name + " (" + branch.Commit[:8] + " .. " + ref.Hash().String()[:8] + ")"
 
 						description := "Changes in " + r.Name + " (<a href=\"" + r.URL + "\">" + r.URL + "</a>)<br><br>" +
-							"<b>Diff:</b><br><br>" +
-							branch.Commit + "<br>"
+							"<b>" + branch.Commit + "<b><br>"
 
 						for _, diff := range diffs {
 							description += string(diff.Type) + " - " + diff.File + "<br>"
 						}
 
-						description += ref.Hash().String()
+						description += "<b>" + ref.Hash().String() + "<b>"
 
 						newFeedItem(title, description, r.URL)
 					}
