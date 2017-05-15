@@ -184,7 +184,8 @@ func (r *Repo) fetchAndLookForChanges() error {
 					}
 
 					if report {
-						diffToRSSFeed("TITLE", "DESCRIPTION", diffs)
+						title := branch.Commit + ".." + ref.Hash().String()
+						newFeedItemFromDiff(title, "", r.URL, diffs)
 					}
 
 					// TODO: analyze diff and report if interested in changes
