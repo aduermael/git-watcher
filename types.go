@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"net/url"
 	"os"
 	"os/exec"
 	"strings"
@@ -9,6 +10,7 @@ import (
 	git "gopkg.in/src-d/go-git.v4"
 	gitConfig "gopkg.in/src-d/go-git.v4/config"
 	gitPlumbing "gopkg.in/src-d/go-git.v4/plumbing"
+	"gopkg.in/src-d/go-git.v4/plumbing/transport/http"
 )
 
 // WatchConfig is the configuration used to watch Github repositories
@@ -93,11 +95,13 @@ func (r *Repo) openOrInitGitRepo() error {
 				return err
 			}
 			// TODO: allow different remotes?
-			var remote *git.Remote
-			remote, err = r.gitRepo.CreateRemote(&gitConfig.RemoteConfig{Name: "origin", URL: r.URL})
+			// repo.fetch fetches "origin" by default
+			// var remote *git.Remote
+			_, err = r.gitRepo.CreateRemote(&gitConfig.RemoteConfig{Name: "origin", URL: r.URL})
 
 			// initial fetch because we just added the remote
-			err = remote.Fetch(&git.FetchOptions{})
+			debug("initial fetch")
+			err = r.fetch()
 			if err != nil {
 				return err
 			}
@@ -127,13 +131,29 @@ func (r *Repo) openOrInitGitRepo() error {
 	return nil
 }
 
+func (r *Repo) fetch() error {
+	// check url domain and env variables to see if Github token should be used
+	u, err := url.Parse(r.URL)
+	if err != nil {
+		debug(err)
+		return err
+	}
+	if u.Host == "github.com" && os.Getenv("GITHUB_USER") != "" && os.Getenv("GITHUB_TOKEN") != "" {
+		err = r.gitRepo.Fetch(&git.FetchOptions{Auth: http.NewBasicAuth(os.Getenv("GITHUB_USER"), os.Getenv("GITHUB_TOKEN"))})
+	} else {
+		err = r.gitRepo.Fetch(&git.FetchOptions{})
+	}
+	return err
+}
+
 func (r *Repo) fetchAndLookForChanges() error {
 
 	if r.gitRepo == nil {
 		return errors.New("git repo not opened")
 	}
 
-	err := r.gitRepo.Fetch(&git.FetchOptions{})
+	err := r.fetch()
+
 	if err != nil && err != git.NoErrAlreadyUpToDate {
 		debug(err)
 		// TODO: an error here may be due to a force push
@@ -157,6 +177,14 @@ func (r *Repo) fetchAndLookForChanges() error {
 				// look for changes...
 				if branch.Commit != ref.Hash().String() {
 					debug(branch.Commit, "!=", ref.Hash().String())
+
+					// this means we certainly fetch for the first time
+					// we don't have anything to compare, so let's just
+					// save the reference and return
+					if branch.Commit == "" {
+						branch.Commit = ref.Hash().String()
+						return nil
+					}
 
 					wd, err := os.Getwd()
 					if err != nil {

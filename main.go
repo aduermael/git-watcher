@@ -32,6 +32,7 @@ func loop() {
 	for {
 		for _, repo := range config.Repos {
 			// compare commits, looking for changes
+			// TODO: error handling
 			_ = repo.fetchAndLookForChanges()
 		}
 
