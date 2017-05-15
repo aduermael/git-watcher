@@ -7,7 +7,9 @@ import (
 )
 
 func fail(e error) {
-	log.Fatalf("error: %v", e)
+	if e != nil {
+		log.Fatalf("error: %v", e)
+	}
 }
 
 func rmDir(path string) {
