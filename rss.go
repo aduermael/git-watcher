@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/feeds"
 )
 
-func newFeedItemFromDiff(title, desc, url string, diffs []*Diff) {
+func newFeedItem(title, desc, url string) {
 
 	now := time.Now()
 
@@ -36,13 +36,9 @@ func newFeedItemFromDiff(title, desc, url string, diffs []*Diff) {
 	item := &feeds.Item{
 		Title:       title,
 		Link:        &feeds.Link{Href: url},
-		Description: "Changes:<br>",
+		Description: desc,
 		Author:      &feeds.Author{Name: "Git repo watcher", Email: ""},
 		Created:     now,
-	}
-
-	for _, diff := range diffs {
-		item.Description += string(diff.Type) + " - " + diff.File + "<br>"
 	}
 
 	feed.Items = append([]*feeds.Item{item}, feed.Items...)
