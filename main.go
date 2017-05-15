@@ -3,7 +3,11 @@ package main
 import "time"
 
 const (
-	configFile = "./watch.yml"
+	configFile  = "/data/watch.yml"
+	historyFile = "/data/history.json"
+	rssFile     = "/data/rss.xml"
+	atomFile    = "/data/atom.xml"
+	reposDir    = "/data/repos"
 )
 
 var (

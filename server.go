@@ -14,7 +14,7 @@ func serveHTTP() {
 	http.HandleFunc("/rss", rss)
 	http.HandleFunc("/feed", rss)
 	http.HandleFunc("/atom", atom)
-	fail(http.ListenAndServe(":8080", nil))
+	fail(http.ListenAndServe(":80", nil))
 }
 
 var (
@@ -24,7 +24,7 @@ var (
 func index(w http.ResponseWriter, r *http.Request) {
 	var err error
 
-	if htmlTemplate == nil || true {
+	if htmlTemplate == nil {
 		htmlTemplate, err = template.ParseFiles("./index.tmpl")
 		if err != nil {
 			http.Error(w, "can't parse template", 500)
@@ -33,7 +33,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var jsonBytes []byte
-	jsonBytes, err = ioutil.ReadFile("./history.json")
+	jsonBytes, err = ioutil.ReadFile(historyFile)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return
@@ -50,7 +50,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 
 func rss(w http.ResponseWriter, r *http.Request) {
-	rssBytes, err := ioutil.ReadFile("./rss.xml")
+	rssBytes, err := ioutil.ReadFile(rssFile)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return
@@ -59,7 +59,7 @@ func rss(w http.ResponseWriter, r *http.Request) {
 }
 
 func atom(w http.ResponseWriter, r *http.Request) {
-	rssBytes, err := ioutil.ReadFile("./atom.xml")
+	rssBytes, err := ioutil.ReadFile(atomFile)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return

@@ -13,7 +13,7 @@ func newFeedItem(title, desc, url string) {
 
 	now := time.Now()
 
-	jsonBytes, err := ioutil.ReadFile("./history.json")
+	jsonBytes, err := ioutil.ReadFile(historyFile)
 
 	var feed *feeds.Feed
 	err = json.Unmarshal(jsonBytes, &feed)
@@ -51,21 +51,21 @@ func newFeedItem(title, desc, url string) {
 		return
 	}
 
-	err = ioutil.WriteFile("./history.json", jsonBytes, 0644)
+	err = ioutil.WriteFile(historyFile, jsonBytes, 0644)
 	if err != nil {
 		debug("error:", err)
 		return
 	}
 
 	rss, _ := feed.ToRss()
-	err = ioutil.WriteFile("./rss.xml", []byte(rss), 0644)
+	err = ioutil.WriteFile(rssFile, []byte(rss), 0644)
 	if err != nil {
 		debug("error:", err)
 		return
 	}
 
 	atom, _ := feed.ToAtom()
-	err = ioutil.WriteFile("./atom.xml", []byte(atom), 0644)
+	err = ioutil.WriteFile(atomFile, []byte(atom), 0644)
 	if err != nil {
 		debug("error:", err)
 		return

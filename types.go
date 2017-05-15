@@ -50,7 +50,7 @@ func (r *Repo) GetBranchIfTracked(refName string) *Branch {
 }
 
 func (r *Repo) storageDir() string {
-	return "./repos/" + r.Name
+	return reposDir + "/" + r.Name
 }
 
 func (r *Repo) openOrInitGitRepo() error {
