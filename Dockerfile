@@ -6,7 +6,16 @@ COPY *.go ./
 COPY index.tmpl index.tmpl
 COPY vendor vendor
 
-RUN go install
+RUN go build
+
+FROM alpine:3.5
+
+RUN apk update && apk add git
+
+WORKDIR /app
+
+COPY --from=0 /go/src/git-repo-watcher/git-repo-watcher /bin/git-repo-watcher
+COPY --from=0 /go/src/git-repo-watcher/index.tmpl index.tmpl
 
 EXPOSE 80
 
