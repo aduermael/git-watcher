@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/feeds"
@@ -39,6 +40,7 @@ func newFeedItem(title, desc, url string) {
 		Description: desc,
 		Author:      &feeds.Author{Name: "Git repo watcher", Email: ""},
 		Created:     now,
+		Id:          strconv.FormatInt(now.UnixNano(), 16),
 	}
 
 	feed.Items = append([]*feeds.Item{item}, feed.Items...)
