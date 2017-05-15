@@ -3,6 +3,9 @@ repos:
     url: https://github.com/aduermael/git-repo-watcher
     branches:
       master:
-        paths:
-        - /test
+        commit: 0cba525445781b5541e6384e24961c5277a6c4c2
       test:
+        commit: 64aa14431208627ddd0ed03830eba720e572cc47
+        files:
+        - '*.go'
+        - test/*.txt
