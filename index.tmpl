@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Git repository watcher</title>
+	<link rel="alternate" type="application/rss+xml" href="/rss" title="Git repository watcher - RSS">
+	<link rel="alternate" type="application/atom+xml" href="/atom" title="Git repository watcher - ATOM">
+</head>
+<body>
+	{{range .Items}}<h2><a href="{{.Link}}">{{.Title}}</a></h2><p>{{.Description}}</p>{{else}}<p>no data</p>{{end}}
+</body>
+</html>

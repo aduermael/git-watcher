@@ -21,6 +21,9 @@ func main() {
 	// commits in the configuration file.
 	saveYML(configFile, config)
 
+	// http server to expose index, rss and atom
+	go serveHTTP()
+
 	// loop forever, looking for changes
 	loop()
 }

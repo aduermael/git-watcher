@@ -34,7 +34,8 @@ func diffToRSSFeed(title, desc string, diffs []*Diff) {
 	}
 
 	item := &feeds.Item{
-		Title:       "changes",
+		Title: "changes",
+		// https://github.com/aduermael/git-repo-watcher/commit/1eedb4043e1033ec4e0c865f03beb8d32e172443
 		Link:        &feeds.Link{Href: "https://github.com"},
 		Description: "Changes:<br>",
 		Author:      &feeds.Author{Name: "Jason Moiron", Email: "jmoiron@jmoiron.net"},
@@ -45,7 +46,7 @@ func diffToRSSFeed(title, desc string, diffs []*Diff) {
 		item.Description += string(diff.Type) + " - " + diff.File + "<br>"
 	}
 
-	feed.Items = append(feed.Items, item)
+	feed.Items = append([]*feeds.Item{item}, feed.Items...)
 
 	jsonBytes, err = json.Marshal(feed)
 	if err != nil {
