@@ -37,11 +37,14 @@ func loop() {
 		for _, repo := range config.Repos {
 			// compare commits, looking for changes
 			// TODO: error handling
-			_ = repo.fetchAndLookForChanges()
+			err := repo.fetchAndLookForChanges()
+			if err != nil {
+				debug("error:", err.Error())
+			}
 		}
 
 		saveYML(configFile, config)
 
-		time.Sleep(10 * time.Second)
+		time.Sleep(1 * time.Hour)
 	}
 }

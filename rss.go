@@ -17,12 +17,7 @@ func newFeedItem(title, desc, url string) {
 
 	var feed *feeds.Feed
 	err = json.Unmarshal(jsonBytes, &feed)
-	if err != nil {
-		debug("error:", err)
-		return
-	}
-
-	// build feed from scratch
+	// if json couldn't be loaded, create new feed:
 	if err != nil {
 		feed = &feeds.Feed{
 			Title:       "Git repo watcher",

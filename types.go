@@ -168,7 +168,8 @@ func (r *Repo) fetchAndLookForChanges() error {
 	if err != nil {
 		return err
 	}
-	referencesIter.ForEach(func(ref *gitPlumbing.Reference) error {
+
+	err = referencesIter.ForEach(func(ref *gitPlumbing.Reference) error {
 		// only consider remotes
 		if ref.IsRemote() {
 			branch := r.GetBranchIfTracked(ref.Name().Short())
@@ -238,5 +239,5 @@ func (r *Repo) fetchAndLookForChanges() error {
 		return nil
 	})
 
-	return nil
+	return err
 }

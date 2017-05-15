@@ -13,9 +13,7 @@ func parseYML(ymlPath string, conf *WatchConfig) {
 	}
 
 	err = yaml.Unmarshal(ymlBytes, config)
-	if err != nil {
-		fail(err)
-	}
+	fail(err)
 
 	for repoKey, repo := range config.Repos {
 		repo.Name = repoKey
@@ -31,8 +29,7 @@ func parseYML(ymlPath string, conf *WatchConfig) {
 
 func saveYML(ymlPath string, conf *WatchConfig) {
 	ymlBytes, err := yaml.Marshal(conf)
-	if err != nil {
-		fail(err)
-	}
-	ioutil.WriteFile(ymlPath, ymlBytes, 0644)
+	fail(err)
+	err = ioutil.WriteFile(ymlPath, ymlBytes, 0644)
+	fail(err)
 }
