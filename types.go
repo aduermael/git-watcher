@@ -30,8 +30,8 @@ type Branch struct {
 	Name string `yaml:"-"`
 	// Commit represents the last commit that's been processed
 	Commit string `yaml:"commit,omitempty"`
-	// if non empty, only listed paths will be watched within branch
-	Paths []string `yaml:"paths,omitempty"`
+	// if non empty, only listed files (or directories) will be watched
+	Files []string `yaml:"files,omitempty"`
 }
 
 // GetBranchIfTracked returns *Branch corresponding to refName if listed in
@@ -179,27 +179,29 @@ func (r *Repo) fetchAndLookForChanges() error {
 
 					// see if we actually need to report, we may not be
 					// interested in changes depending on the files affected
-					if len(branch.Paths) > 0 {
-						// TODO: check and set report = false if needed
+					for len(branch.Files) > 0 {
+						report = false
+						for _, filePattern := range branch.Files {
+							for _, diff := range diffs {
+								if filePathMatchPattern(filePattern, diff.File) {
+									report = true
+									break
+								}
+							}
+						}
+						break
 					}
 
 					if report {
-
 						title := r.Name + " (" + branch.Commit[:8] + " .. " + ref.Hash().String()[:8] + ")"
-
 						description := "Changes in " + r.Name + " (<a href=\"" + r.URL + "\">" + r.URL + "</a>)<br><br>" +
 							"<b>" + branch.Commit + "</b><br>"
-
 						for _, diff := range diffs {
 							description += string(diff.Type) + " - " + diff.File + "<br>"
 						}
-
 						description += "<b>" + ref.Hash().String() + "</b>"
-
 						newFeedItem(title, description, r.URL)
 					}
-
-					// TODO: analyze diff and report if interested in changes
 
 					branch.Commit = ref.Hash().String()
 				}
