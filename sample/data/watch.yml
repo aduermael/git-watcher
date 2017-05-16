@@ -1,11 +1,12 @@
 repos:
-  git-repo-watcher:
-    url: https://github.com/aduermael/git-repo-watcher
+  git-watcher:
+    url: https://github.com/aduermael/git-watcher
     branches:
       master:
-        commit: 0cba525445781b5541e6384e24961c5277a6c4c2
-      test:
-        commit: 64aa14431208627ddd0ed03830eba720e572cc47
+  dockercraft:
+    url: https://github.com/docker/dockercraft
+    branches:
+      master:
         files:
         - '*.go'
-        - test/*.txt
+        - 'Docker/config.lua'
